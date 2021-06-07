@@ -49,10 +49,17 @@ public class Grille {
         }
     }
 
-    /*public boolean insereJeton(int indexCol, Jeton j) {
-        int indexLigne = this.plusHautJetonIndex(indexCol);
-
-    }*/
+    public boolean insereJeton(int indexCol, Jeton j) {
+        if (this.isColonneFull(indexCol)) {
+            return false;
+        }
+        else {
+            int indexLigne = this.plusHautJetonIndex(indexCol);
+            System.out.println(indexLigne);
+            this.placerJeton(indexLigne,indexCol,j);
+            return true;
+        }
+    }
 
     /**
      * Retourne vrai si la colonne passé en paramètre est pleine
@@ -60,7 +67,7 @@ public class Grille {
      * @return boolean
      */
     public boolean isColonneFull(int indexCol) {
-        return (this.plusHautJetonIndex(indexCol) == LONGUEUR_GRILLE);
+        return (this.plusHautJetonIndex(indexCol) == -1 && !this.getCase(0,indexCol).isEmpty());
     }
 
     /**
@@ -69,10 +76,10 @@ public class Grille {
      * @return int
      */
     public int plusHautJetonIndex(int indexCol) {
-        int indexPlusHaut = 0;
+        int indexPlusHaut = LONGUEUR_GRILLE-1;
         for (int i = 0; i < LONGUEUR_GRILLE; i++) {
             if (!this.getCase(i,indexCol).isEmpty()) {
-                return i;
+                return i-1;
             }
         }
         return indexPlusHaut;
@@ -116,13 +123,15 @@ public class Grille {
         Case[][] cases = grille.getCases();
         Jeton jetonJaune = new Jeton(new Couleur("Jaune"));
         Jeton jetonRouge = new Jeton(new Couleur("Rouge"));
+        //System.out.println(grille.plusHautJetonIndex(0));
 
-        grille.placerJeton(2,0,jetonJaune);
-        grille.placerJeton(3,0,jetonJaune);
-        System.out.println(grille.isColonneFull(0));
-        int indexLigneCol1 = grille.plusHautJetonIndex(0);
-        System.out.println(indexLigneCol1);
-        //grille.placerJeton(3,1, jetonRouge);
+        grille.insereJeton(0,jetonJaune);
+        grille.insereJeton(0,jetonJaune);
+        grille.insereJeton(0,jetonJaune);
+        grille.insereJeton(0,jetonJaune);
+        grille.insereJeton(0,jetonJaune);
+        grille.insereJeton(1,jetonRouge);
+
         System.out.println(grille);
     }
 }
