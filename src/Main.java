@@ -1,10 +1,19 @@
 public class Main {
 
     public static void main(String[]args) {
-        Couleur rouge = new Couleur("Rouge");
-        Couleur jaune = new Couleur("Jaune");
-        Jeton j = new Jeton(jaune);
-        Case c1 = new Case(j);
-        System.out.println(c1);
+        Grille grille = new Grille();
+        Case[][] cases = grille.getCases();
+        Jeton jetonJaune = new Jeton(new Couleur("Jaune"));
+        Jeton jetonRouge = new Jeton(new Couleur("Rouge"));
+        //System.out.println(grille.plusHautJetonIndex(0));
+
+        grille.insereJeton(0,jetonJaune);
+        grille.insereJeton(0,jetonJaune);
+        grille.insereJeton(0,jetonJaune);
+        grille.insereJeton(0,jetonJaune);
+        grille.insereJeton(0,jetonJaune);
+        grille.insereJeton(1,jetonRouge);
+
+        System.out.println(grille);
     }
 }

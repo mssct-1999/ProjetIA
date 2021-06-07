@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Grille {
 
-    public static final int LARGEUR_GRILLE = 3;
-    public static final int LONGUEUR_GRILLE = 4;
+    public static final int LARGEUR_GRILLE = 7;
+    public static final int LONGUEUR_GRILLE = 6;
     private Case[][] cases;
 
     /**
