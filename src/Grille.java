@@ -137,42 +137,42 @@ public class Grille {
      * @param declinaisonVrtcale
      * @return
      */
-    public boolean compteAlignementDeJeton(Couleur couleur, int indexCol, int indexLigne, int declinaisonHztale, int declinaisonVrtcale) {
+    public boolean chercheAlignementDeJeton(Couleur couleur, int indexCol, int indexLigne, int declinaisonHztale, int declinaisonVrtcale) {
         boolean alignementPreserve = true;
         int tailleAlignement = 3;
-        while(tailleAlignement != 0 && alignementPreserve) {
-            if (declinaisonHztale == 0 && declinaisonVrtcale == 1) {
-                System.out.println("Recherche Sud / Ligne " + indexLigne + " Col " + indexCol);
-            }
-            if (declinaisonHztale == 1 && declinaisonVrtcale == 0) {
-                System.out.println("Recherche West / Ligne " + indexLigne + " Col " + indexCol);
-            }
-            if (declinaisonHztale == 1 && declinaisonVrtcale == 1) {
-                System.out.println("Recherche Sud West / Ligne " + indexLigne + " Col " + indexCol);
-            }
-            if (declinaisonHztale == 0 && declinaisonVrtcale == 0) {
-                System.out.println("Recherche Case courante / Ligne " + indexLigne + " Col " + indexCol);
-            }
-            Jeton jeton = null;
+        Jeton jeton = null;
+        while (tailleAlignement != 0 && alignementPreserve) {
             try {
+                if (declinaisonHztale == 0 && declinaisonVrtcale == 1) {
+                    System.out.println("Recherche Sud / Ligne " + indexLigne + " Col " + indexCol);
+                }
+                if (declinaisonHztale == 1 && declinaisonVrtcale == 0) {
+                    System.out.println("Recherche Est / Ligne " + indexLigne + " Col " + indexCol);
+                }
+                if (declinaisonHztale == 1 && declinaisonVrtcale == 1) {
+                    System.out.println("Recherche Sud Est / Ligne " + indexLigne + " Col " + indexCol);
+                }
+                if (declinaisonHztale == 0 && declinaisonVrtcale == 0) {
+                    System.out.println("Recherche Case courante / Ligne " + indexLigne + " Col " + indexCol);
+                }
                 // On récupère le jeton correspondant pour vérifier sa couleur
                 Case c = this.getCase(indexLigne, indexCol);
-                Jeton j = c.getJeton();
+                jeton = c.getJeton();
+                // on teste si il y a un jeton et si la couleur du jeton correspond à la couleur de l'alignement
+                if (jeton == null || !jeton.getCouleur().equals(couleur)) {
+                    alignementPreserve = false;
+                }
+                // on cherche sur la prochaine et on réduit le nombre de cases à chercher et donc l'alignement
+                indexCol+=declinaisonHztale;
+                indexLigne+=declinaisonVrtcale;
+                tailleAlignement--;
+                continue;
             } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("Stop that fucking loop");
+                System.out.println("Stop that damn loop");
                 // L'alignement n'existe pas puisqu'on est hors grille
                 alignementPreserve = false;
                 break;
             }
-
-            // on teste si il y a un jeton et si la couleur du jeton correspond à la couleur de l'alignement
-            if (jeton == null || !jeton.getCouleur().equals(couleur)) {
-                alignementPreserve = false;
-            }
-            // on cherche sur la prochaine et on réduit le nombre de cases à chercher et donc l'alignement
-            indexCol+=declinaisonHztale;
-            indexLigne+=declinaisonVrtcale;
-            tailleAlignement--;
         }
         return alignementPreserve;
     }
@@ -186,15 +186,15 @@ public class Grille {
         boolean alignementTrouve = false;
 
         for (int i = 0; i < LONGUEUR_GRILLE && !alignementTrouve; i++) {
-            for(int j = 0; j < LARGEUR_GRILLE && !alignementTrouve; i++) {
-                alignementTrouve = this.compteAlignementDeJeton(couleur,j,i,0,1) ||
-                        this.compteAlignementDeJeton(couleur,j,i,1,1) ||
-                        this.compteAlignementDeJeton(couleur,j,i,1,0) ||
-                        this.compteAlignementDeJeton(couleur,j,i,1,-1) ||
-                        this.compteAlignementDeJeton(couleur,j,i,0,-1) ||
-                        this.compteAlignementDeJeton(couleur,j,i,-1,-1) ||
-                        this.compteAlignementDeJeton(couleur,j,i,-1,0) ||
-                        this.compteAlignementDeJeton(couleur,j,i,-1,1);
+            for(int j = 0; j < LARGEUR_GRILLE && !alignementTrouve; j++) {
+                alignementTrouve = this.chercheAlignementDeJeton(couleur,j,i,0,1) ||
+                        this.chercheAlignementDeJeton(couleur,j,i,1,1) ||
+                        this.chercheAlignementDeJeton(couleur,j,i,1,0) ||
+                        this.chercheAlignementDeJeton(couleur,j,i,1,-1) ||
+                        this.chercheAlignementDeJeton(couleur,j,i,0,-1) ||
+                        this.chercheAlignementDeJeton(couleur,j,i,-1,-1) ||
+                        this.chercheAlignementDeJeton(couleur,j,i,-1,0) ||
+                        this.chercheAlignementDeJeton(couleur,j,i,-1,1);
 
             }
         }
@@ -207,7 +207,15 @@ public class Grille {
      * @return boolean
      */
     public boolean isGrilleFull() {
-        // TODO
+        for (int i = 0; i < LARGEUR_GRILLE; i++) {
+            try {
+                if (!this.isColonneFull(i)) {
+                    return false;
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
         return true;
     }
 
@@ -219,13 +227,8 @@ public class Grille {
         Case[][] cases = grille.getCases();
         Jeton jetonJaune = new Jeton(new Couleur("Jaune"));
         Jeton jetonRouge = new Jeton(new Couleur("Rouge"));
-
-        grille.insereJeton(0,jetonJaune);
-        grille.insereJeton(0,jetonJaune);
-        grille.insereJeton(0,jetonJaune);
-        grille.insereJeton(1,jetonJaune);
-        grille.insereJeton(1,jetonJaune);
-        System.out.println(grille.chercheAlignementDeJeton(rouge));
+        
+        System.out.println(grille.isGrilleFull());
         System.out.println(grille);
     }
 }
