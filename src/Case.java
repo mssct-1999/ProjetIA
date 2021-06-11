@@ -1,3 +1,7 @@
+/**
+ * Class: Case
+ * Une case peut être vide ou avec un jeton
+ */
 public class Case {
 
     private Jeton jeton;
@@ -24,6 +28,12 @@ public class Case {
     public void setJeton(Jeton jeton) {
         this.jeton = jeton;
     }
+
+    /**
+     * Getter du  jeton
+     * @return Jeton
+     */
+    public Jeton getJeton() { return this.jeton; }
 
     /**
      * Retourne vrai si la case est vide (sans jeton), false sinon

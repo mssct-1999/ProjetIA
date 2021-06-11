@@ -1,5 +1,7 @@
-import java.util.ArrayList;
-
+/**
+ * Class: Grille
+ * Une grille est représentée par une matrice de Case et peut contenir des Jeton
+ */
 public class Grille {
 
     public static final int LARGEUR_GRILLE = 7;
@@ -49,13 +51,19 @@ public class Grille {
         }
     }
 
+    /**
+     * Insère un jeton dans la colonne insiquée si cela est possible (si la colonne n'est pas pleine)
+     * @param indexCol
+     * @param j
+     * @return
+     */
     public boolean insereJeton(int indexCol, Jeton j) {
         if (this.isColonneFull(indexCol)) {
+            System.out.println("La colonne dans laquelle on tente d'insérer le jeton " + j + " est pleine");
             return false;
         }
         else {
             int indexLigne = this.plusHautJetonIndex(indexCol);
-            System.out.println(indexLigne);
             this.placerJeton(indexLigne,indexCol,j);
             return true;
         }
@@ -117,21 +125,107 @@ public class Grille {
         return str;
     }
 
+    /**
+     * Retourne vrai si il existe un alignement de 3 jetons de la couleur passé en paramètre.
+     * La recherche se fait à partir de l'index de la colonne (indexCol) et de la ligne (indexLigne).
+     * Elle va dans le sens des déclinaisons horizontales et verticales fournies en paramètre. Si on donne (0,0) alors la recherche se fera sur la même case.
+     * (1,1) la recherche se fera en diagonale "Nord-Est". (-1,0) Direction "Ouest"
+     * @param couleur
+     * @param indexCol
+     * @param indexLigne
+     * @param declinaisonHztale
+     * @param declinaisonVrtcale
+     * @return
+     */
+    public boolean compteAlignementDeJeton(Couleur couleur, int indexCol, int indexLigne, int declinaisonHztale, int declinaisonVrtcale) {
+        boolean alignementPreserve = true;
+        int tailleAlignement = 3;
+        while(tailleAlignement != 0 && alignementPreserve) {
+            if (declinaisonHztale == 0 && declinaisonVrtcale == 1) {
+                System.out.println("Recherche Sud / Ligne " + indexLigne + " Col " + indexCol);
+            }
+            if (declinaisonHztale == 1 && declinaisonVrtcale == 0) {
+                System.out.println("Recherche West / Ligne " + indexLigne + " Col " + indexCol);
+            }
+            if (declinaisonHztale == 1 && declinaisonVrtcale == 1) {
+                System.out.println("Recherche Sud West / Ligne " + indexLigne + " Col " + indexCol);
+            }
+            if (declinaisonHztale == 0 && declinaisonVrtcale == 0) {
+                System.out.println("Recherche Case courante / Ligne " + indexLigne + " Col " + indexCol);
+            }
+            Jeton jeton = null;
+            try {
+                // On récupère le jeton correspondant pour vérifier sa couleur
+                Case c = this.getCase(indexLigne, indexCol);
+                Jeton j = c.getJeton();
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Stop that fucking loop");
+                // L'alignement n'existe pas puisqu'on est hors grille
+                alignementPreserve = false;
+                break;
+            }
+
+            // on teste si il y a un jeton et si la couleur du jeton correspond à la couleur de l'alignement
+            if (jeton == null || !jeton.getCouleur().equals(couleur)) {
+                alignementPreserve = false;
+            }
+            // on cherche sur la prochaine et on réduit le nombre de cases à chercher et donc l'alignement
+            indexCol+=declinaisonHztale;
+            indexLigne+=declinaisonVrtcale;
+            tailleAlignement--;
+        }
+        return alignementPreserve;
+    }
+
+    /**
+     * Vérifie sur l'intégralité de la grille s'il existe un alignement de 3 jetons de la couleur renseignées.
+     * @param couleur
+     * @return boolean
+     */
+    public boolean chercheAlignementDeJeton(Couleur couleur) {
+        boolean alignementTrouve = false;
+
+        for (int i = 0; i < LONGUEUR_GRILLE && !alignementTrouve; i++) {
+            for(int j = 0; j < LARGEUR_GRILLE && !alignementTrouve; i++) {
+                alignementTrouve = this.compteAlignementDeJeton(couleur,j,i,0,1) ||
+                        this.compteAlignementDeJeton(couleur,j,i,1,1) ||
+                        this.compteAlignementDeJeton(couleur,j,i,1,0) ||
+                        this.compteAlignementDeJeton(couleur,j,i,1,-1) ||
+                        this.compteAlignementDeJeton(couleur,j,i,0,-1) ||
+                        this.compteAlignementDeJeton(couleur,j,i,-1,-1) ||
+                        this.compteAlignementDeJeton(couleur,j,i,-1,0) ||
+                        this.compteAlignementDeJeton(couleur,j,i,-1,1);
+
+            }
+        }
+        return alignementTrouve;
+    }
+
+
+    /**
+     * Retourne vrai si toutes les colonnes sont pleines, false sinon.
+     * @return boolean
+     */
+    public boolean isGrilleFull() {
+        // TODO
+        return true;
+    }
+
     // test
     public static void main(String[]args) {
         Grille grille = new Grille();
+        Couleur jaune = new Couleur("Jaune");
+        Couleur rouge = new Couleur("Rouge");
         Case[][] cases = grille.getCases();
         Jeton jetonJaune = new Jeton(new Couleur("Jaune"));
         Jeton jetonRouge = new Jeton(new Couleur("Rouge"));
-        //System.out.println(grille.plusHautJetonIndex(0));
 
         grille.insereJeton(0,jetonJaune);
         grille.insereJeton(0,jetonJaune);
         grille.insereJeton(0,jetonJaune);
-        grille.insereJeton(0,jetonJaune);
-        grille.insereJeton(0,jetonJaune);
-        grille.insereJeton(1,jetonRouge);
-
+        grille.insereJeton(1,jetonJaune);
+        grille.insereJeton(1,jetonJaune);
+        System.out.println(grille.chercheAlignementDeJeton(rouge));
         System.out.println(grille);
     }
 }

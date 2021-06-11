@@ -1,4 +1,8 @@
-public class Joueur {
+/**
+ * Class: Joueur
+ * Un joueur est représenté par son pseudo et la couleur de ses jetons
+ */
+ class Joueur {
 
     /**
      * Couleur des jetons du joueurs
@@ -17,8 +21,4 @@ public class Joueur {
         this.pseudo = _pseudo;
         this.couleur = _couleur;
     }
-
-    /**
-     * TODO: placerJeton
-     */
 }

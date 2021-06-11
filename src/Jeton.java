@@ -15,7 +15,15 @@ public class Jeton {
      */
      public Jeton(Couleur _couleur) {
             this.couleur = _couleur;
-        }
+     }
+
+    /**
+     * Getter sur la couleur du jeton
+     * @return Couleur
+     */
+    public Couleur getCouleur() {
+         return this.couleur;
+    }
 
     /**
      * Un jeton est représenté par sa couleur : Retourne la première lettre de la couleur à laquelle il est associé
