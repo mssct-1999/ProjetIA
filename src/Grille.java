@@ -139,11 +139,11 @@ public class Grille {
      */
     public boolean chercheAlignementDeJeton(Couleur couleur, int indexCol, int indexLigne, int declinaisonHztale, int declinaisonVrtcale) {
         boolean alignementPreserve = true;
-        int tailleAlignement = 3;
+        int tailleAlignement = 4;
         Jeton jeton = null;
         while (tailleAlignement != 0 && alignementPreserve) {
             try {
-                if (declinaisonHztale == 0 && declinaisonVrtcale == 1) {
+                /*if (declinaisonHztale == 0 && declinaisonVrtcale == 1) {
                     System.out.println("Recherche Sud / Ligne " + indexLigne + " Col " + indexCol);
                 }
                 if (declinaisonHztale == 1 && declinaisonVrtcale == 0) {
@@ -154,7 +154,7 @@ public class Grille {
                 }
                 if (declinaisonHztale == 0 && declinaisonVrtcale == 0) {
                     System.out.println("Recherche Case courante / Ligne " + indexLigne + " Col " + indexCol);
-                }
+                }*/
                 // On récupère le jeton correspondant pour vérifier sa couleur
                 Case c = this.getCase(indexLigne, indexCol);
                 jeton = c.getJeton();
@@ -168,7 +168,6 @@ public class Grille {
                 tailleAlignement--;
                 continue;
             } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("Stop that damn loop");
                 // L'alignement n'existe pas puisqu'on est hors grille
                 alignementPreserve = false;
                 break;
@@ -227,7 +226,7 @@ public class Grille {
         Case[][] cases = grille.getCases();
         Jeton jetonJaune = new Jeton(new Couleur("Jaune"));
         Jeton jetonRouge = new Jeton(new Couleur("Rouge"));
-        
+
         System.out.println(grille.isGrilleFull());
         System.out.println(grille);
     }
