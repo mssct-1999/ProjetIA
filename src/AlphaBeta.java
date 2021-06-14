@@ -41,6 +41,7 @@ public class AlphaBeta {
                 if (!grille.isColonneFull(i)) {
                     Grille copie = grille.copie();
                     Jeton jeton = new Jeton(j.getCouleur());
+                    copie.insereJeton(i,jeton);
                     double valeurDeJeuCourante = this.alphabeta(copie,j,PROFONDEUR_EXPLORATION_ALPHA_BETA);
                     if (valeurDeJeuCourante == valeurDeJeu) {
                         colonneAJouer.add(Integer.valueOf(i));
