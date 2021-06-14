@@ -8,10 +8,20 @@ public class Partie {
     private Joueur joueur2;
     private Grille grille;
 
+    public static Partie partie = null;
+
     public Partie(Joueur joueur1, Joueur joueur2) {
         this.joueur1 = joueur1;
         this.joueur2 = joueur2;
         this.grille = new Grille();
+    }
+
+    /**
+     * Retourne la partie
+     * @return Partie
+     */
+    public static Partie getPartie() {
+        return Partie.partie;
     }
 
     /**
@@ -78,7 +88,7 @@ public class Partie {
         // tant que le joueur n'a pas jouer correctement -> boucle
         do {
             coupJouer = true;
-            int indexCol = joueur.chooseColumn(this.grille);
+            int indexCol = joueur.chooseColumn(this.grille,joueur);
             System.out.println("Le joueur " + joueur.getPseudo() + " joue dans la colonne " + indexCol);
             Jeton j = new Jeton(joueur.getCouleur());
             try {

@@ -17,7 +17,7 @@ public class JoueurClavier extends Joueur {
      * @return indexCol le numéro de la colonne où placer le jeton
      */
     @Override
-    public int chooseColumn(Grille grille) {
+    public int chooseColumn(Grille grille, Joueur j) {
         System.out.println("Où placer le prochain jeton ? Donnez un numéro de colonne entre 0 et " + Grille.LARGEUR_GRILLE + " : ");
         Scanner scan = new Scanner(System.in);
         int indexCol = scan.nextInt();

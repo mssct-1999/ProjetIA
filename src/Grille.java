@@ -218,6 +218,29 @@ public class Grille {
         return true;
     }
 
+    /**
+     * Créer une copie de la grille
+     * @return Grille: la copie de la grille
+     */
+    public Grille copie() {
+        Grille copie = new Grille();
+        for (int i = 0; i < LONGUEUR_GRILLE; i++) {
+            for (int j = 0; j < LARGEUR_GRILLE; j++) {
+                try {
+                    Jeton jeton = this.getCase(i,j).getJeton();
+                    if (jeton != null) {
+                        Jeton copieJeton = new Jeton(jeton.getCouleur());
+                        Case copieCase = copie.getCase(i,j);
+                        copieCase.setJeton(copieJeton);
+                    }
+                } catch(ArrayIndexOutOfBoundsException err) {
+                    err.printStackTrace();
+                }
+            }
+        }
+        return copie;
+    }
+
     // test
     public static void main(String[]args) {
         Grille grille = new Grille();

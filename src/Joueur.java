@@ -46,5 +46,5 @@ import java.util.Scanner;
      * @param grille
      * @return indexCol le numéro de la colonne où placer le jeton
      */
-    public abstract int chooseColumn(Grille grille);
+    public abstract int chooseColumn(Grille grille, Joueur j);
 }
